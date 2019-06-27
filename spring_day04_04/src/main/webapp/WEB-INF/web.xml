@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+    <!-- &lt;!&ndash;
+     配置监听器 ContextLoderListener监听器:初始化一个全局唯一的spring容器
+     &ndash;&gt;
+     &lt;!&ndash;默认会从/WEB-INF/applicationContext.xml读取配置文件&ndash;&gt;
+     <listener>
+         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+     </listener>
+
+     &lt;!&ndash;指定读取applicationContext.xml的位置&ndash;&gt;
+     <context-param>
+         <param-name>contextConfigLocation</param-name>
+         <param-value>classpath:applicationContext.xml</param-value>
+     </context-param>-->
+
+    <!--配置前段控制器-->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!--加载指定位置的springmvc-servlet.xml配置文件-->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springmvc-servlet.xml</param-value>
+        </init-param>
+        <!--配置tomcat启动时初始化前端控制器-->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <!--控制器会拦截以.do为后缀的请求-->
+        <!--不需要加/-->
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+<!--post请求乱码过滤器-->
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>
+

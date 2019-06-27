@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--配置注解扫描 -->
+    <context:component-scan base-package="cn.itcast"></context:component-scan>
+    <!--配置注解驱动-->
+    <!--解决String接收json  中文乱码问题-->
+    <!--设置String的消息转换器的编码-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <!--String消息转换器中有一个构造函数可以设置编码集，因此只要直接赋值即可-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="defaultCharset" value="utf-8"></property>
+                <!--<constructor-arg index="0" value="utf-8"/>-->
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--&lt;!&ndash;配置拦截器&ndash;&gt;
+    <mvc:interceptors>
+        <mvc:interceptor>
+            &lt;!&ndash;拦截路径 拦截所有&ndash;&gt;
+            <mvc:mapping path="/**"/>
+            <bean class="cn.itcast.interceptor.MyInterceptor1"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="cn.itcast.interceptor.MyInterceptor2"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="cn.itcast.interceptor.MyInterceptor3"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+-->
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--配置前缀:去哪里找视图-->
+        <property name="prefix" value="/WEB-INF/views/"></property>
+        <!--配置后缀:找什么类型的视图-->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+  <!--  配置文件上传解析器
+    必须配置id属性，并且名称固定为multipartResolver-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--设置上传文件的大小 单位byte-->
+        <property name="maxUploadSize" value="5242880"></property>
+        <!--设置上传文件的编码集-->
+        <property name="defaultEncoding" value="utf-8"></property>
+    </bean>
+
+   <!--  &lt;!&ndash;配置自定义处理器异常解析器&ndash;&gt;
+     <bean class="cn.itcast.web.MyHandlerExceptionResolver"></bean>-->
+</beans>
