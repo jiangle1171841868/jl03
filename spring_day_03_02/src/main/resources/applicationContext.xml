@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--配置注解扫描-->
+    <context:component-scan base-package="com.itheima"></context:component-scan>
+    <!--开启注解aop-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+    <!--装配accountService-->
+    <bean id="accountService" class="com.itheima.service.impl.AccountServiceImpl"></bean>
+
+    <!--装配logger-->
+    <bean id="logger" class="com.itheima.logger.Logger"></bean>
+
+    <!--  &lt;!&ndash;配置AOP&ndash;&gt;
+      <aop:config>
+          &lt;!&ndash;配置切入点&ndash;&gt;
+          <aop:pointcut id="pt1" expression="execution(* com.itheima.service.impl.*.*(..))"></aop:pointcut>
+          &lt;!&ndash;配置切面&ndash;&gt;
+          <aop:aspect id="logAdvice" ref="logger">
+              &lt;!&ndash;<aop:before method="beforePrintLog" pointcut-ref="pt1"></aop:before>
+              <aop:before method="afterReturningPrintLog" pointcut-ref="pt1"></aop:before>
+              <aop:before method="afterThrowingPrintLog" pointcut-ref="pt1"></aop:before>
+              <aop:before method="afterPrintLog" pointcut-ref="pt1"></aop:before>&ndash;&gt;
+              <aop:around method="around" pointcut-ref="pt1"></aop:around>
+          </aop:aspect>
+      </aop:config>
+
+
+      -->
+    <!--配置aop-->
+    <aop:config>
+        <!--配置切入点表达式-->
+        <aop:pointcut id="pt1" expression="execution(* com.itheima.service.impl.*.*(..))"></aop:pointcut>
+
+        <!--配置切面-->
+        <aop:aspect id="logAdvice" ref="logger">
+            <!--
+            配置后置通知
+            在通知中有返回值类型  就要配置returning-->
+            <aop:after-returning method="afterReturningPrintLog" returning="returnVal" pointcut-ref="pt1"></aop:after-returning>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
